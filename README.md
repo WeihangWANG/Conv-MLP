@@ -33,7 +33,7 @@ As shown, Conv-MLP ranks first in terms of the mean ACER on the seven unseen pro
 
 - **Visualization**
 <div align=center>
-<img src="image/grad-wmca.png" width="600" height="400"/>
+<img src="image/grad-wmca.png" width="600" height="500"/>
 
 The visualized gradient map of typical samples from WMCA dataset.
 </div>
