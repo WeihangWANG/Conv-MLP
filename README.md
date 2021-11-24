@@ -10,10 +10,12 @@ This repo is a python reimplementation of Conv-MLP.
 Conv-MLP is a simple yet effective  architecture for multi-modal face anti-spoofing, which incorporates local patch convolution with global MLP. 
 
 Conv-MLP breaks the inductive bias limitation of traditional full CNNs and can be expected to better exploit long-range dependencies.
-
-![alt text](image/conv-mlp-1-1118.png )
+ 
+<div align=center>
+<img src="image/conv-mlp-1-1118.png" width="400" height="400"/>
 
 The overall pipeline of Conv-MLP.
+</div>
 
 
 ## Performace
@@ -24,13 +26,17 @@ on multi-modal benchmarks (WMCA and CeFA) in comparison with existing state-of-t
 
 ### Results on WMCA
 
+- **ACER (Average Classification Error Rate)**
 ![alt text](image/res-wmca.png )
 
 As shown, Conv-MLP ranks first in terms of the mean ACER on the seven unseen protocols (7.16 $\pm$ 11.10%), which implies Conv-MLP can extract discriminative representations and performs well on unseen scenarios.
 
-![alt text](image/grad-wmca.png )
+- **Visualization**
+<div align=center>
+<img src="image/grad-wmca.png" width="600" height="400"/>
 
 The visualized gradient map of typical samples from WMCA dataset.
+</div>
 
 
 
