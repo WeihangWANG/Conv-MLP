@@ -1,1 +1,1 @@
-To verify the different overlap rates, you can change the number of patches parameter in `mixer.py`. Specifically, change the dimension 9 of the bottleneck layer to the corresponding number of patches.
+To verify the different overlap rates, you can change the number of patches parameter in `mixer.py`. Specifically, change the dimension 9 of the bottleneck layer to the corresponding number of patches. Also, you need to modify the way to split the image into patches in `../data/augmentation.py`.
