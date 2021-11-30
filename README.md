@@ -89,3 +89,4 @@ We provide pre-trained models on two datasets separately.
 
     *GoogleDrive:* https://drive.google.com/drive/folders/1ef7eFX8qbrygXLsFJqPJWWMvlvpBuWlP?usp=sharing
 
+You need to place the pre-trained model under the path specified in `train.py`, for example `./models_wmca/Conv-MLP_48/checkpoint/pretrained_model.pth`. If no existing path, please build it by yourself.
