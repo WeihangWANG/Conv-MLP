@@ -82,13 +82,15 @@ We provide pre-trained models on two datasets separately.
 
 - WMCA
 
-    *BaiduCloud:* Coming soon
+    *BaiduCloud:* https://pan.baidu.com/s/1nwk5E8fCwNU-QbXvl0SqGQ 
+(code：1xqu)
 
     *GoogleDrive:* https://drive.google.com/drive/folders/1wqSUKGrAzk8EVpgE3a18L2OWLBds7RDU?usp=sharing
     
 - CeFA
 
-    *BaiduCloud:* Coming soon
+    *BaiduCloud:* https://pan.baidu.com/s/12fZebAoM5w77neXd6f69QA 
+(code：51jq)
 
     *GoogleDrive:* https://drive.google.com/drive/folders/1dWAeIQm9WzbYQOIXtr7qlqk2F0COqLC8?usp=sharing
 
