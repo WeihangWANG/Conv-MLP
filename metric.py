@@ -103,81 +103,6 @@ def metric(logit, truth):
     # correct = np.mean(correct)
     return correct, prob
 
-def do_test( net, test_loader ):
-    num = 4646
-    # f_out = open('../HiFi/phase1/res_test_062009.txt', 'w+')
-
-    # net = torch.nn.DataParallel(net)
-    # net = net.cuda()
-
-    for i, (input, input_lr, input_cs, input_aug, status) in enumerate(tqdm(test_loader)):
-        # for input, truth in test_loader:
-        ## TTA Cropping
-        b, n, c, w, h = input.size()
-
-        input = input.cuda()
-        input_lr = input_lr.cuda()
-        input_cs = input_cs.cuda()
-        input_aug = input_aug.cuda()
-        status = status.cuda()
-
-        with torch.no_grad():
-            # src
-            color_res, ir_res, clr_patch_res, ir_patch_res = net(input)
-            clr_patch = torch.mean(clr_patch_res, dim=1)
-            ir_patch = torch.mean(ir_patch_res, dim=1)
-            # clr_patch = clr_patch_res[:, 0, :] * 0.15 + clr_patch_res[:, 2, :] * 0.15 + clr_patch_res[:, 6, :] * 0.15 + \
-            #             clr_patch_res[:, 8, :] * 0.15 + clr_patch_res[:, 7, :] * 0.08 + clr_patch_res[:, 1, :] * 0.08 + \
-            #             clr_patch_res[:, 3, :] * 0.08 + clr_patch_res[:, 4, :] * 0.08 + clr_patch_res[:, 5, :] * 0.08
-            # ir_patch = ir_patch_res[:, 0, :] * 0.15 + ir_patch_res[:, 2, :] * 0.15 + ir_patch_res[:, 6, :] * 0.15 + \
-            #            ir_patch_res[:, 8, :] * 0.15 + ir_patch_res[:, 7, :] * 0.08 + ir_patch_res[:, 1, :] * 0.08 + \
-            #            ir_patch_res[:, 3, :] * 0.08 + ir_patch_res[:, 4, :] * 0.08 + ir_patch_res[:, 5, :] * 0.08
-            logit = color_res * 0.25 + clr_patch * 0.25 + ir_res * 0.25 + ir_patch * 0.25
-
-            # horizontal flip
-            color_res, ir_res, clr_patch_res, ir_patch_res = net(input_lr)
-            clr_patch = torch.mean(clr_patch_res, dim=1)
-            ir_patch = torch.mean(ir_patch_res, dim=1)
-            # clr_patch = clr_patch_res[:, 0, :] * 0.15 + clr_patch_res[:, 2, :] * 0.15 + clr_patch_res[:, 6, :] * 0.15 + \
-            #             clr_patch_res[:, 8, :] * 0.15 + clr_patch_res[:, 7, :] * 0.08 + clr_patch_res[:, 1, :] * 0.08 + \
-            #             clr_patch_res[:, 3, :] * 0.08 + clr_patch_res[:, 4, :] * 0.08 + clr_patch_res[:, 5, :] * 0.08
-            # ir_patch = ir_patch_res[:, 0, :] * 0.15 + ir_patch_res[:, 2, :] * 0.15 + ir_patch_res[:, 6, :] * 0.15 + \
-            #            ir_patch_res[:, 8, :] * 0.15 + ir_patch_res[:, 7, :] * 0.08 + ir_patch_res[:, 1, :] * 0.08 + \
-            #            ir_patch_res[:, 3, :] * 0.08 + ir_patch_res[:, 4, :] * 0.08 + ir_patch_res[:, 5, :] * 0.08
-            logit_lr = color_res * 0.25 + clr_patch * 0.25 + ir_res * 0.25 + ir_patch * 0.25
-
-            # # contrast
-            # color_res, ir_res, clr_patch_res, ir_patch_res = net(input_cs)
-            # clr_patch = clr_patch_res[:, 0, :] * 0.15 + clr_patch_res[:, 2, :] * 0.15 + clr_patch_res[:, 6, :] * 0.15 + \
-            #             clr_patch_res[:, 8, :] * 0.15 + clr_patch_res[:, 7, :] * 0.08 + clr_patch_res[:, 1, :] * 0.08 + \
-            #             clr_patch_res[:, 3, :] * 0.08 + clr_patch_res[:, 4, :] * 0.08 + clr_patch_res[:, 5, :] * 0.08
-            # ir_patch = ir_patch_res[:, 0, :] * 0.15 + ir_patch_res[:, 2, :] * 0.15 + ir_patch_res[:, 6, :] * 0.15 + \
-            #            ir_patch_res[:, 8, :] * 0.15 + ir_patch_res[:, 7, :] * 0.08 + ir_patch_res[:, 1, :] * 0.08 + \
-            #            ir_patch_res[:, 3, :] * 0.08 + ir_patch_res[:, 4, :] * 0.08 + ir_patch_res[:, 5, :] * 0.08
-            # logit_cs = color_res * 0.25 + clr_patch * 0.25 + ir_res * 0.25 + ir_patch * 0.25
-            #
-            # # horizontal flip + contrast
-            # color_res, ir_res, clr_patch_res, ir_patch_res = net(input_aug)
-            # clr_patch = clr_patch_res[:, 0, :] * 0.15 + clr_patch_res[:, 2, :] * 0.15 + clr_patch_res[:, 6, :] * 0.15 + \
-            #             clr_patch_res[:, 8, :] * 0.15 + clr_patch_res[:, 7, :] * 0.08 + clr_patch_res[:, 1, :] * 0.08 + \
-            #             clr_patch_res[:, 3, :] * 0.08 + clr_patch_res[:, 4, :] * 0.08 + clr_patch_res[:, 5, :] * 0.08
-            # ir_patch = ir_patch_res[:, 0, :] * 0.15 + ir_patch_res[:, 2, :] * 0.15 + ir_patch_res[:, 6, :] * 0.15 + \
-            #            ir_patch_res[:, 8, :] * 0.15 + ir_patch_res[:, 7, :] * 0.08 + ir_patch_res[:, 1, :] * 0.08 + \
-            #            ir_patch_res[:, 3, :] * 0.08 + ir_patch_res[:, 4, :] * 0.08 + ir_patch_res[:, 5, :] * 0.08
-            # logit_aug = color_res * 0.25 + clr_patch * 0.25 + ir_res * 0.25 + ir_patch * 0.25
-
-            logit_sum = logit * 0.5 + logit_lr * 0.5# + logit_cs * 0.25 + logit_aug * 0.25
-
-            prob = F.softmax(logit_sum, 1)
-
-            for m in range(len(input)):
-
-                if status[m] == 0:
-                    prob[m][1] = 0.001
-
-                # f_out.write("%s.png %f\n"%(num, prob[m][1]))
-                num = num + 1
-
 
 def do_valid_test( net, test_loader, criterion ):
     valid_num  = 0
@@ -194,12 +119,8 @@ def do_valid_test( net, test_loader, criterion ):
     gt = []
     net = torch.nn.DataParallel(net)
     net = net.cuda()
-    # f_out = open('../HiFi/phase1/res_val_062010.txt', 'w+')
-    # f_err = open('res_err_0708.txt', 'w+')
 
     for i, (input, input_lr, truth) in enumerate(tqdm(test_loader)):
-    # for input, truth in test_loader:
-        ## TTA Cropping
         b,n,c,w,h = input.size()
 
         input = input.cuda()
@@ -207,86 +128,42 @@ def do_valid_test( net, test_loader, criterion ):
 
         truth = truth.cuda()
         with torch.no_grad():
-            # src
+
             # res, dep_res = net(input, input_lr)
             res = net(input)
             # logit_sum = res + dep_res * 0.5
             logit_sum = res
             # print("logit_sum:", logit_sum)
-            # norm_max, max_index = res.abs().max(dim=1)
-            # res = torch.div(res.t(), norm_max)
-            # res = res.t()
-            # mask_pos = truth.view(res.shape[0]) > 0
-            # mask_neg = truth.view(res.shape[0]) == 0
-            # color_p = res[mask_pos,:]
-            # color_n = res[mask_neg,:]
-            # print("color_p_src = ", color_p)
-            # print("color_n_src = ", color_n)
-            # logit_sum = res
 
             truth = truth.view(res.shape[0])
-            # truth_tsne = truth.clone().detach()
-            # truth[truth==2] = 0
-            # print("truth shape", truth.shape)
+
             loss = criterion(logit_sum, truth, False)
             correct, prob = metric(logit_sum, truth)
-            # prob_p = prob[mask_pos, :]
-            # prob_n = prob[mask_neg, :]
 
             # if i % 50 == 1:
             #     tsne = TSNE(n_components=2)
             #     low_fea = fea.clone()
-            #     # print("low fea = ", low_fea)
             #     low_fea = low_fea.cpu().data.numpy()
             #     low_fea = np.array(low_fea, dtype=np.float64)
             #     visual.append(low_fea)
             #     gt.append(truth.data.cpu().numpy())
 
-            ### save txt
-            # for m in range(len(input)):
-            # #
-            #     if status[m] == 0:
-            # #         prob[m][1] = 0.001
-            #     f_out.write("%04d.png %f\n" % (num, prob[m][1]))
-                # num = num + 1
-
-
         valid_num += len(input)
         losses.append(loss.data.cpu().numpy())
-        # corrects.append(corrects.data.cpu().numpy())
         corrects.append(np.asarray(correct))
         probs.append(prob.data.cpu().numpy())
-        # probs.append(np.asarray(correct))
-        # probs_pos.append(prob_p.data.cpu().numpy())
-        # probs_neg.append(prob_n.data.cpu().numpy())
         labels.append(truth.data.cpu().numpy())
 
 
     correct_cat = np.concatenate(corrects)
-    # print("correct size", correct_cat.shape)
     loss    = np.concatenate(losses)
-    # print("loss size", loss.shape)
     loss    = loss.mean()
     correct_ = correct_cat.mean()
 
     probs = np.concatenate(probs)
-    # print("probs:\n", probs)
-    # probs_pos = np.concatenate(probs_pos)
-    # probs_neg = np.concatenate(probs_neg)
-    # probs_pos = probs_pos[:,1]
-    # probs_neg = probs_neg[:,1]
-    # print("prob_pos : \n", probs_pos)
-    # print("prob_neg : \n", probs_neg)
-    # for m in range(10):
-    #     q = np.sum(list(map(lambda x:x>0.1*m and x<=0.1*(m+1), probs_pos)))
-    #     s = np.sum(list(map(lambda x:x>0.1*m and x<=0.1*(m+1), probs_neg)))
-    #     pos_his.append(q)
-    #     neg_his.append(s)
-    # # print("probs size", probs.shape)
+    
     labels = np.concatenate(labels)
-    # print("pos history : \n", pos_his)
-    # print("neg history : \n", neg_his)
-    # print("labels size", labels.shape)
+    
 #     visual = np.concatenate(visual)
 #     gt = np.concatenate(gt)
 #
@@ -304,8 +181,6 @@ def do_valid_test( net, test_loader, criterion ):
 #             clr = 'blue'
 #         else:
 #             clr = 'red'
-#         # else:
-#         #     clr = 'green'
 #         plt.scatter(x,y,color=clr)
 #         # ax.scatter3D(x,y,z,color=clr)
 # #
@@ -315,18 +190,9 @@ def do_valid_test( net, test_loader, criterion ):
 #     # plt.savefig("./pic/tsne_2d_4@2_5_0803.png")
 #     plt.savefig("./pic/4@2_50.png")
 
-    # tpr_1, fpr_1 = TPR_FPR( probs[:,1], labels, fpr_target = 0.01)
-    # print("FPR=%s | TPR=%s "%(fpr_1, tpr_1))
-    # tpr_1, fpr_1 = TPR_FPR(probs[:, 1], labels, fpr_target=0.001)
-    # print("FPR=%s | TPR=%s " % (fpr_1, tpr_1))
-    # tpr_1, fpr_1 = TPR_FPR(probs[:, 1], labels, fpr_target=0.0001)
-    # print("FPR=%s | TPR=%s " % (fpr_1, tpr_1))
 
     acer,apcer,npcer,_,_,_,_ = ACER(0.5, probs[:, 1], labels)
 
-    # valid_loss = np.array([
-    #     loss, acer, acc, correct, tpr_0, fnr_0, tpr_1, fnr_1, apcer, npcer
-    # ])
     valid_loss = np.array([loss, acer, correct_, apcer, npcer])
 
     return valid_loss,[probs[:, 1], labels]
