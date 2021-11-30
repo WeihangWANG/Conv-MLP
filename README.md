@@ -67,6 +67,8 @@ Note that for every training, you need to goto `./data/prepare_data.py` and modi
 
 You can also find variables, such as *batch_size*, *patch_size*, *learning rate*, and *number of epoches* in the `train.py`.
 
+In addition, if the pre-trained model is used for fine-tuning, the initial learning rate should be set smaller, e.g. 1e-4.
+
 ### Evaluation
 
 ```
