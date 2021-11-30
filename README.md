@@ -29,7 +29,7 @@ on multi-modal benchmarks (WMCA and CeFA) in comparison with existing state-of-t
 - **ACER (Average Classification Error Rate)**
 ![alt text](image/res-wmca.png )
 
-As shown, Conv-MLP ranks first in terms of the mean ACER on the seven unseen protocols (7.16 $\pm$ 11.10%), which implies Conv-MLP can extract discriminative representations and performs well on unseen scenarios.
+As shown, Conv-MLP ranks first in terms of the mean ACER on the seven unseen protocols (7.16 ± 11.10%), which implies Conv-MLP can extract discriminative representations and performs well on unseen scenarios.
 
 - **Visualization**
 <div align=center>
