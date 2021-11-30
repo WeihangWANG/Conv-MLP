@@ -97,11 +97,7 @@ def run_train(config):
                                           eta_min=1e-3)
 
     global_min_acer = 1.0
-    m = 0.5
-    cos_m = math.cos(m)
-    sin_m = math.sin(m)
-    thres_add = math.cos(math.pi - m)
-    thres_mns = math.cos(m)
+    
     for cycle_index in range(config.cycle_num):
         print('cycle index: ' + str(cycle_index))
         min_acer = 1.0
@@ -196,7 +192,7 @@ def run_val(config):
     initial_checkpoint = config.pretrained_model
 
     ## net ---------------------------------------
-    net = get_model(model_name=config.model, num_class=2)
+    net = ConvMLP(num_class=2)
     net = torch.nn.DataParallel(net)
     net = net.cuda()
 
