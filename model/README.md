@@ -1,1 +1,1 @@
-To verify the different overlap rates, you can change the number of patches parameter in `mixer.py`. Specifically, change the 9 to the corresponding number.
+To verify the different overlap rates, you can change the number of patches parameter in `mixer.py`. Specifically, change the dimension 9 of the bottleneck layer to the corresponding number of patches.
