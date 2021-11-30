@@ -82,7 +82,8 @@ We provide pre-trained models on two datasets separately.
 
     *BaiduCloud:* Coming soon
 
-    *GoogleDrive:* https://drive.google.com/drive/folders/1dWAeIQm9WzbYQOIXtr7qlqk2F0COqLC8?usp=sharing
+    *GoogleDrive:* https://drive.google.com/drive/folders/1wqSUKGrAzk8EVpgE3a18L2OWLBds7RDU?usp=sharing
+    
 - CeFA
 
     *BaiduCloud:* Coming soon
