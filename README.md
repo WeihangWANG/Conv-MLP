@@ -82,11 +82,11 @@ We provide pre-trained models on two datasets separately.
 
     *BaiduCloud:* Coming soon
 
-    *GoogleDrive:* https://drive.google.com/drive/folders/1ef7eFX8qbrygXLsFJqPJWWMvlvpBuWlP?usp=sharing
+    *GoogleDrive:* https://drive.google.com/drive/folders/1dWAeIQm9WzbYQOIXtr7qlqk2F0COqLC8?usp=sharing
 - CeFA
 
     *BaiduCloud:* Coming soon
 
-    *GoogleDrive:* https://drive.google.com/drive/folders/1ef7eFX8qbrygXLsFJqPJWWMvlvpBuWlP?usp=sharing
+    *GoogleDrive:* https://drive.google.com/drive/folders/1eMiyoIuLry3geOZ9BetTHRuuVg2m66I-?usp=sharing
 
 You need to place the pre-trained model under the path specified in `train.py`, for example `./models_wmca/Conv-MLP_48/checkpoint/pretrained_model.pth`. If no existing path, please build it by yourself.
