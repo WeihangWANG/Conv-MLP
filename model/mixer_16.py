@@ -1,10 +1,6 @@
 from utils import *
-import torchvision.models as tvm
 import torch.nn as nn
 import torch
-import torch.nn.functional as F
-import numpy as np
-from .backbone.FaceBagNet import FaceBagNet_model_A
 BatchNorm2d = nn.BatchNorm2d
 
 ###########################################################################################3
@@ -72,8 +68,7 @@ class Mixer(nn.Module):
 
     def forward(self, x):
         b, n, c, w, h = x.shape
-        
-        x = x.transpose(1, 2)# print("color_fea size : ", color_fea.size())
+        x = x.transpose(1, 2)
         x = x.reshape(b * 64, n, 24, 24)
 
         x1 = self.bottleneck_1(x)
@@ -82,13 +77,13 @@ class Mixer(nn.Module):
         x1 = x1.transpose(1, 2)
         x1 = x1.reshape(b * n, 64, 24, 24)
 
-        x1 = self.layer2(x1) #; print('e1',x.size())
+        x1 = self.layer2(x1)
 
         x1 = x1.view(b, n, 128, 12, 12)
         x1 = x1.transpose(1, 2)
         x1 = x1.reshape(b * 128, n, 12, 12)
 
-        x2 = self.bottleneck_2(x1) #; print('e2',x.size())
+        x2 = self.bottleneck_2(x1)
 
         x2 = x2.view(b, 128, n, 12, 12)
         x2 = x2.transpose(1, 2)
@@ -113,6 +108,7 @@ class Mixer(nn.Module):
         x4 = x4.reshape(b * 512, n, 3, 3)
 
         x4 = self.bottleneck_4(x4)
+
         x4 = x4.view(b, 512, n, 3, 3)
 
         return x4

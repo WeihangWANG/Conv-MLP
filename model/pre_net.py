@@ -72,14 +72,12 @@ class Pre_Net(nn.Module):
 
     def forward(self, x):
         b, n, c, h, w = x.shape
-        # b, n, h, w = x.shape
         x = x.view(b * n, c, w, h)
 
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
         x = self.layer1(x)
-
         x1 = x.view(b, n, 64, 24, 24)
 
         return x1
