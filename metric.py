@@ -38,17 +38,6 @@ def ACER(threshold, dist, actual_issame):
     return acer, apcer, npcer, tp, fp, tn,fn
 
 def TPR_FPR( dist, actual_issame, fpr_target = 0.001):
-    # acer_min = 1.0
-    # thres_min = 0.0
-    # re = []
-
-    # Positive
-    # Rate(FPR):
-    # FPR = FP / (FP + TN)
-
-    # Positive
-    # Rate(TPR):
-    # TPR = TP / (TP + FN)
 
     thresholds = np.arange(0.0, 1.0, fpr_target)
     nrof_thresholds = len(thresholds)
@@ -61,20 +50,13 @@ def TPR_FPR( dist, actual_issame, fpr_target = 0.001):
             tp, fp, tn, fn = calculate(threshold, dist, actual_issame)
             FPR = fp / (fp*1.0 + tn*1.0)
 
-            # TPR = tp / (tp*1.0 + fn*1.0)
-
         fpr[threshold_idx] = FPR
-        # print("fpr=%s  @thr=%s"%(FPR, threshold))
-
-    # print(np.max(fpr))
 
     if np.max(fpr) >= fpr_target:
         f = interpolate.interp1d(np.asarray(fpr), thresholds)
         threshold = f(fpr_target)
     else:
         threshold = 0.0
-
-    # print("thres=", threshold)
 
     tp, fp, tn, fn = calculate(threshold, dist, actual_issame)
 
@@ -92,15 +74,9 @@ def TPR_FPR( dist, actual_issame, fpr_target = 0.001):
 import torch.nn.functional as F
 def metric(logit, truth):
     prob = F.softmax(logit, 1)
-    # print("prob size", prob.size())
     value, top = prob.topk(1, dim=1, largest=True, sorted=True)
-    # print("top size", top.size())
-    # print(top)
     correct = top.eq(truth.view(-1, 1).expand_as(top))
-    # print(correct)
     correct = correct.data.cpu().numpy()
-    # prob = prob.data.cpu().numpy()
-    # correct = np.mean(correct)
     return correct, prob
 
 
@@ -110,10 +86,6 @@ def do_valid_test( net, test_loader, criterion ):
     losses   = []
     corrects = []
     probs = []
-    probs_pos = []
-    probs_neg = []
-    pos_his = []
-    neg_his = []
     labels = []
     visual = []
     gt = []
@@ -121,6 +93,7 @@ def do_valid_test( net, test_loader, criterion ):
     net = net.cuda()
 
     for i, (input, input_lr, truth) in enumerate(tqdm(test_loader)):
+    # for input, truth in test_loader:
         b,n,c,w,h = input.size()
 
         input = input.cuda()
@@ -128,12 +101,11 @@ def do_valid_test( net, test_loader, criterion ):
 
         truth = truth.cuda()
         with torch.no_grad():
-
+            # src
             # res, dep_res = net(input, input_lr)
             res = net(input)
             # logit_sum = res + dep_res * 0.5
             logit_sum = res
-            # print("logit_sum:", logit_sum)
 
             truth = truth.view(res.shape[0])
 
@@ -143,10 +115,12 @@ def do_valid_test( net, test_loader, criterion ):
             # if i % 50 == 1:
             #     tsne = TSNE(n_components=2)
             #     low_fea = fea.clone()
+            #     # print("low fea = ", low_fea)
             #     low_fea = low_fea.cpu().data.numpy()
             #     low_fea = np.array(low_fea, dtype=np.float64)
             #     visual.append(low_fea)
             #     gt.append(truth.data.cpu().numpy())
+
 
         valid_num += len(input)
         losses.append(loss.data.cpu().numpy())
@@ -161,9 +135,8 @@ def do_valid_test( net, test_loader, criterion ):
     correct_ = correct_cat.mean()
 
     probs = np.concatenate(probs)
-    
     labels = np.concatenate(labels)
-    
+
 #     visual = np.concatenate(visual)
 #     gt = np.concatenate(gt)
 #
@@ -181,6 +154,7 @@ def do_valid_test( net, test_loader, criterion ):
 #             clr = 'blue'
 #         else:
 #             clr = 'red'
+
 #         plt.scatter(x,y,color=clr)
 #         # ax.scatter3D(x,y,z,color=clr)
 # #
