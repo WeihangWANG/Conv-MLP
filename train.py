@@ -17,7 +17,7 @@ torch.cuda.manual_seed(0)
 def run_train(config):
     # out_dir = './models_mixer'
     out_dir = './models_wmca'
-    config.model_name = 'Conv-MLP_' + '_' + str(config.image_size)
+    config.model_name = 'Conv-MLP'
     out_dir = os.path.join(out_dir,config.model_name)
     initial_checkpoint = config.pretrained_model
     criterion          = softmax_cross_entropy_criterion
@@ -97,7 +97,6 @@ def run_train(config):
                                           eta_min=1e-3)
 
     global_min_acer = 1.0
-    
     for cycle_index in range(config.cycle_num):
         print('cycle index: ' + str(cycle_index))
         min_acer = 1.0
@@ -114,7 +113,6 @@ def run_train(config):
 
             for input, depth, truth in train_loader:
                 iter = i + start_iter
-                l1_reg = 0.0
 
                 # one iteration update  -------------
 
@@ -139,7 +137,7 @@ def run_train(config):
                 color_dis_n[color_dis_n < 0] = 0
                 color_dis_n = color_dis_n.mean()
                 color_dis_p = color_dis_p.mean()
-                loss = criterion(color_res, truth)
+                loss = criterion(color_res, truth) + (color_dis_p + color_dis_n) * 0.5
                 precision, _ = metric(logit, truth)
                 precision = np.mean(precision)
 
@@ -185,9 +183,9 @@ def run_train(config):
         log.write('save cycle ' + str(cycle_index) + ' final model \n')
 
 def run_val(config):
-    config.model_name = config.model + '_' + config.image_mode + '_' + str(config.image_size)
-    out_dir = './models_mixer'
-    # out_dir = './models_wmca'
+    config.model_name = 'Conv-MLP'
+    # out_dir = './models_mixer'
+    out_dir = './models_wmca'
     out_dir = os.path.join(out_dir,config.model_name)
     initial_checkpoint = config.pretrained_model
 
