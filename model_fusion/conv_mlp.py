@@ -4,7 +4,6 @@ from torchvision.models.resnet import BasicBlock, ResNet
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-import numpy as np
 BatchNorm2d = nn.BatchNorm2d
 from model.pre_net import Pre_Net
 from model.mixer import Mixer
@@ -61,14 +60,3 @@ class ConvMLP(nn.Module):
                         m.weight.requires_grad = False
                         m.bias.requires_grad   = False
 
-### run ##############################################################################
-def run_check_net():
-    num_class = 2
-    net = Net(num_class)
-    print(net)
-
-########################################################################################
-if __name__ == '__main__':
-    import os
-    run_check_net()
-    print( 'sucessful!')
