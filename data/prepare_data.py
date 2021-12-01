@@ -15,7 +15,7 @@ def load_train_list():
     list = []
     list_fold = []
     # f = open(DATA_ROOT + '/4@1_train_3_ft.txt')  # CeFA
-    f = open(DATA_ROOT + '/fakehead_train.txt')  # WMCA
+    f = open(DATA_ROOT + '/replay_train.txt')  # WMCA
     lines = f.readlines()
 
     for line in lines:
@@ -27,8 +27,8 @@ def load_train_list():
 def load_val_list():
     print("Loading val data ...")
     list = []
-    # f = open(DATA_ROOT + '/4@1_test_3_ft.txt')  # CeFA
-    f = open(DATA_ROOT + '/grand_test.txt')  # WMCA
+    # f = open(DATA_ROOT + '/4@1_test_3_rect.txt')  # CeFA
+    f = open(DATA_ROOT + '/replay_test.txt')  # WMCA
     lines = f.readlines()
 
     for line in lines:

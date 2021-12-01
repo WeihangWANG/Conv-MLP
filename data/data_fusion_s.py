@@ -113,24 +113,6 @@ class FasDataset(Dataset):
         return self.num_data
 
 
-# check #################################################################
-def run_check_train_data():
-    dataset = FasDataset(mode = 'train')
-    # print(dataset)
 
-    num = len(dataset)
-    for m in range(num):
-        i = np.random.choice(num)
-        image, label = dataset[m]
-        print(image.shape)
-        print(label)
-
-        if m > 100:
-            break
-
-# main #################################################################
-if __name__ == '__main__':
-    print( '%s: calling main function ... ' % os.path.basename(__file__))
-    run_check_train_data()
 
 

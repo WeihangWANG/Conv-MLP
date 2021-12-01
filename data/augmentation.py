@@ -6,7 +6,7 @@ from skimage import exposure
 from torchvision import transforms as tfs
 from .prepare_data import *
 
-def random_cropping(image, target_shape=(32, 32), is_random = True):
+def random_cropping(image, target_shape=(48, 48), is_random = True):
     # print("shape:",image.shape)
     image = cv2.resize(image,(RESIZE_SIZE,RESIZE_SIZE))
     target_h, target_w = target_shape
@@ -160,7 +160,7 @@ def augumentor_1(color, depth, ir, target_shape=(48, 48, 3), is_infer=False):
         return color, depth, ir, fake
 
 ## augment for validation and test
-def augumentor_2(color, depth, ir, target_shape=(32, 32, 3)):
+def augumentor_2(color, depth, ir, target_shape=(48, 48, 3)):
 
         augment_img = iaa.Sequential([
             iaa.Fliplr(1),
@@ -171,25 +171,14 @@ def augumentor_2(color, depth, ir, target_shape=(32, 32, 3)):
         color_lr = augment_img.augment_image(color)
         ir_lr = augment_img.augment_image(ir)
 
-        # exp_num = len(ir[ir > 200])
-        # if exp_num >= 150:
-        #     ir = cv2.merge([ir] * 3)
-        #     ir = Image.fromarray(ir)
-        #     ir = tfs.ColorJitter(brightness=(0.5, 0.5), contrast=(2.0, 2.0), saturation=(1.0, 1.0))(ir)
-        #     ir = cv2.cvtColor(np.array(ir), cv2.COLOR_BGR2GRAY)
-
         ## segmentation
         # src
         ir = TTA_9_cropps(ir, target_shape)
         depth = TTA_9_cropps(depth, target_shape)
         color = TTA_9_cropps_color(color, target_shape)
-        # ir = TTA_9_cropps_color(ir, target_shape)
-        # depth = TTA_9_cropps_color(depth, target_shape)
         # horizontal flip
         ir_lr= TTA_9_cropps(ir_lr, target_shape)
         depth_lr = TTA_9_cropps(depth_lr, target_shape)
         color_lr = TTA_9_cropps_color(color_lr, target_shape)
-        # ir_lr = TTA_9_cropps_color(ir_lr, target_shape)
-        # depth_lr = TTA_9_cropps_color(depth_lr, target_shape)
 
         return color, depth, ir, color_lr, depth_lr, ir_lr
