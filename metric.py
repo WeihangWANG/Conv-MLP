@@ -79,7 +79,7 @@ def metric(logit, truth):
     correct = correct.data.cpu().numpy()
     return correct, prob
 
-
+## For Multi-modal Datasets (RGB+D+IR)
 def do_valid_test( net, test_loader, criterion ):
     valid_num  = 0
     num = 1
@@ -101,10 +101,7 @@ def do_valid_test( net, test_loader, criterion ):
 
         truth = truth.cuda()
         with torch.no_grad():
-            # src
-            # res, dep_res = net(input, input_lr)
             res = net(input)
-            # logit_sum = res + dep_res * 0.5
             logit_sum = res
 
             truth = truth.view(res.shape[0])
@@ -112,22 +109,11 @@ def do_valid_test( net, test_loader, criterion ):
             loss = criterion(logit_sum, truth, False)
             correct, prob = metric(logit_sum, truth)
 
-            # if i % 50 == 1:
-            #     tsne = TSNE(n_components=2)
-            #     low_fea = fea.clone()
-            #     # print("low fea = ", low_fea)
-            #     low_fea = low_fea.cpu().data.numpy()
-            #     low_fea = np.array(low_fea, dtype=np.float64)
-            #     visual.append(low_fea)
-            #     gt.append(truth.data.cpu().numpy())
-
-
         valid_num += len(input)
         losses.append(loss.data.cpu().numpy())
         corrects.append(np.asarray(correct))
         probs.append(prob.data.cpu().numpy())
         labels.append(truth.data.cpu().numpy())
-
 
     correct_cat = np.concatenate(corrects)
     loss    = np.concatenate(losses)
@@ -137,39 +123,67 @@ def do_valid_test( net, test_loader, criterion ):
     probs = np.concatenate(probs)
     labels = np.concatenate(labels)
 
-#     visual = np.concatenate(visual)
-#     gt = np.concatenate(gt)
-#
-#     visual = tsne.fit_transform(visual)
-#     # X_, Y_, Z_ = visual[:, 0], visual[:, 1], visual[:, 2]
-#     X_, Y_ = visual[:, 0], visual[:, 1]
-#     plt.xlim(X_.min(), X_.max())
-#     plt.ylim(Y_.min(), Y_.max())
-#     # plt.ylim(Z_.min(), Z_.max())
-#
-#     # ax = plt.axes(projection='3d')
-#     # for x,y,z,g in zip(X_,Y_,Z_, gt):
-#     for x,y,g in zip(X_,Y_,gt):
-#         if g==0:
-#             clr = 'blue'
-#         else:
-#             clr = 'red'
-
-#         plt.scatter(x,y,color=clr)
-#         # ax.scatter3D(x,y,z,color=clr)
-# #
-#     # plt.title('Visualization TSNE')
-#     plt.xticks([])
-#     plt.yticks([])
-#     # plt.savefig("./pic/tsne_2d_4@2_5_0803.png")
-#     plt.savefig("./pic/4@2_50.png")
-
-
     acer,apcer,npcer,_,_,_,_ = ACER(0.5, probs[:, 1], labels)
 
     valid_loss = np.array([loss, acer, correct_, apcer, npcer])
 
     return valid_loss,[probs[:, 1], labels]
+
+## For RGB Datasets
+def validate(data_loader, model):
+    losses   = []
+    corrects = []
+    probs = []
+    labels = []
+    valid_num = 0
+    criterion = softmax_cross_entropy_criterion
+    
+    model.eval()
+
+    acer_meter = AverageMeter()
+    apcer_meter = AverageMeter()
+    bpcer_meter = AverageMeter()
+    res_con = []
+    end = time.time()
+    for idx, (images, target) in enumerate(data_loader):
+        ### 120 is the parameter set in "data_fusion_oulu.py"
+        images = images.view(120,9,3,48,48)
+        images = images.cuda(non_blocking=True)
+        target = target.cuda(non_blocking=True)
+        tp = 0
+        fp = 0
+        fn = 0
+        tn = 0
+        with torch.no_grad():
+            res = model(images)
+            
+            logit_mean = res.mean(dim=0)
+            target = target.view(res.shape[0])[0].data.cpu().numpy()
+            prob = F.softmax(logit_mean)
+            pred = prob[1].data.cpu().numpy()
+            res_con.append([pred,target])
+            thres = 0.5
+            if pred > thres:
+                if target == 1:
+                    tp = tp + 1
+                else:
+                    fp = fp + 1
+            else:
+                if target == 1:
+                    fn = fn + 1
+                else:
+                    tn = tn + 1
+            apcer = fp / (tn*1.0 + fp*1.0 + 1e-5)
+            bpcer = fn / (fn*1.0 + tp*1.0 + 1e-5)
+            acer = (apcer + bpcer) / 2.0
+
+            acer_meter.update(acer)
+            apcer_meter.update(apcer)
+            bpcer_meter.update(bpcer)
+
+    logger.info(f' * ACER {acer_meter.avg:.4f} APCER {apcer_meter.avg:.4f} BPCER {bpcer_meter.avg:.4f}')
+    return acer_meter.avg, apcer_meter.avg, bpcer_meter.avg
+
 
 def infer_test(net, test_loader):
     valid_num  = 0
