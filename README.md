@@ -51,7 +51,7 @@ The visualized gradient map of typical samples from WMCA dataset.
 
 ### Datasets
 
-We train and test on the [WMCA](https://www.idiap.ch/dataset/wmca) and [CeFA](https://sites.google.com/qq.com/face-anti-spoofing/dataset-download/casia-surf-cefacvpr2020) datasets respectively. According to the usage license agreement, we do not have the right to provide the datasets in public. If you need to use them, please refer to the link and apply to the relevant scientific institutions for research usage.
+We train and test on the multi-modal datasets including [WMCA](https://www.idiap.ch/dataset/wmca) and [CeFA](https://sites.google.com/qq.com/face-anti-spoofing/dataset-download/casia-surf-cefacvpr2020), and RGB datasets including OULU-NPU and SiW. According to the usage license agreement, we do not have the right to provide the datasets in public. If you need to use them, please refer to the link and apply to the relevant scientific institutions for research usage.
 
 ### Training
 
