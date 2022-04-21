@@ -41,7 +41,7 @@ def run_train(config):
     valid_dataset = FasDataset(mode = 'val', image_size=config.image_size)
     valid_loader  = DataLoader( valid_dataset,
                                 shuffle=False,
-                                # batch_size  = config.batch_size // 36,     # TTA 36
+                                ## batch_size = 1  # For OULU-NPU
                                 batch_size = config.batch_size,
                                 drop_last   = False,
                                 num_workers = 8)
@@ -86,7 +86,7 @@ def run_train(config):
     start = timer()
     #-----------------------------------------------
     optimizer = optim.SGD(filter(lambda p: p.requires_grad, net.parameters()),
-                          lr=1e-2, momentum=0.9, weight_decay=0.005)
+                          lr=1e-3, momentum=0.9, weight_decay=0.005)
 
     sgdr = CosineAnnealingLR_with_Restart(optimizer,
                                           T_max=config.cycle_inter,
@@ -94,7 +94,7 @@ def run_train(config):
                                           model=net,
                                           out_dir='../input/',
                                           take_snapshot=False,
-                                          eta_min=1e-3)
+                                          eta_min=1e-5)
 
     global_min_acer = 1.0
     for cycle_index in range(config.cycle_num):
@@ -156,7 +156,10 @@ def run_train(config):
 
             if epoch >= 0:
                 net.eval()
+                ## For Multi-modal datasets
                 valid_loss, _ = do_valid_test(net, valid_loader, criterion)
+                ## For RGB datasets
+                # acer, apcer, bpcer = validate(data_loader, model)
                 net.train()
 
                 if valid_loss[1] < min_acer and epoch >= 0:
@@ -203,12 +206,16 @@ def run_val(config):
     valid_loader  = DataLoader( valid_dataset,
                                 shuffle=False,
                                 batch_size  = config.batch_size // 2,
+                                ## batch_size = 1  # For OULU-NPU
                                 drop_last   = False,
                                 num_workers=8)
 
     criterion = softmax_cross_entropy_criterion
     net.eval()
+    ## For Multi-modal datasets
     valid_loss, _ = do_valid_test(net, valid_loader, criterion)
+    ## For RGB datasets
+    # acer, apcer, bpcer = validate(data_loader, model)
     print('ACER=%0.4f    |     APCER=%0.4f    |    NPCER=%0.4f  \n' % (valid_loss[1], valid_loss[3], valid_loss[4]))
     print('done')
 
