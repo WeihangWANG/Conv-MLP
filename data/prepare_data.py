@@ -3,7 +3,9 @@ import random
 from utils import *
 
 # DATA_ROOT = '../CASIA-CeFA-Challenge'
-DATA_ROOT = '../WMCA'
+# DATA_ROOT = '../WMCA'
+DATA_ROOT = '../oulu-npu'
+VAL_ROOT = '../oulu-npu/Test_files/Test_files/'
 
 TRN_IMGS_DIR = DATA_ROOT + '/Training/'
 TST_IMGS_DIR = DATA_ROOT + '/Testing/'
@@ -15,7 +17,8 @@ def load_train_list():
     list = []
     list_fold = []
     # f = open(DATA_ROOT + '/4@1_train_3_ft.txt')  # CeFA
-    f = open(DATA_ROOT + '/replay_train.txt')  # WMCA
+#     f = open(DATA_ROOT + '/replay_train.txt')  # WMCA
+    f = open(DATA_ROOT + '/Protocols/Protocols/Protocol_3/Train_1_ft.txt')  # oulu
     lines = f.readlines()
 
     for line in lines:
@@ -28,7 +31,8 @@ def load_val_list():
     print("Loading val data ...")
     list = []
     # f = open(DATA_ROOT + '/4@1_test_3_rect.txt')  # CeFA
-    f = open(DATA_ROOT + '/replay_test.txt')  # WMCA
+    # f = open(DATA_ROOT + '/replay_test.txt')  # WMCA
+    f = open(DATA_ROOT + '/Protocols/Protocols/Protocol_3/Test_1.txt')  # oulu
     lines = f.readlines()
 
     for line in lines:
