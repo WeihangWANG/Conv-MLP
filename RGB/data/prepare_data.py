@@ -15,7 +15,7 @@ def load_train_list():
     list = []
     list_fold = []
 
-    f = open(DATA_ROOT + '/Protocols/Protocols/Protocol_1/Train_ft.txt')  # oulu
+    f = open(DATA_ROOT + '/Protocols/Protocols/Protocol_4/Train_1_ft.txt')  # oulu
     lines = f.readlines()
 
     for line in lines:
@@ -28,7 +28,7 @@ def load_val_list():
     print("Loading val data ...")
     list = []
 
-    f = open(DATA_ROOT + '/Protocols/Protocols/Protocol_1/Test.txt')  # oulu
+    f = open(DATA_ROOT + '/Protocols/Protocols/Protocol_4/Test_1.txt')  # oulu
     lines = f.readlines()
 
     for line in lines:
