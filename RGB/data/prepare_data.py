@@ -2,7 +2,6 @@ import os
 import random
 from utils import *
 
-# DATA_ROOT = '../CASIA-CeFA-Challenge'
 DATA_ROOT = '../oulu-npu'
 VAL_ROOT = '../oulu-npu/Test_files/Test_files/'
 
@@ -15,7 +14,7 @@ def load_train_list():
     print("Loading train data ...")
     list = []
     list_fold = []
-    # f = open(DATA_ROOT + '/4@1_train_3_ft.txt')  # CeFA
+
     f = open(DATA_ROOT + '/Protocols/Protocols/Protocol_1/Train_ft.txt')  # oulu
     lines = f.readlines()
 
@@ -28,7 +27,7 @@ def load_train_list():
 def load_val_list():
     print("Loading val data ...")
     list = []
-    # f = open(DATA_ROOT + '/4@1_test_3_rect.txt')  # CeFA
+
     f = open(DATA_ROOT + '/Protocols/Protocols/Protocol_1/Test.txt')  # oulu
     lines = f.readlines()
 
