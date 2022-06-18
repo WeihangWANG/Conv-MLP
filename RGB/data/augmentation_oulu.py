@@ -7,21 +7,6 @@ from skimage import exposure
 from torchvision import transforms as tfs
 from .prepare_data import *
 
-def random_cropping(image, target_shape=(48, 48), is_random = True):
-    # print("shape:",image.shape)
-    image = cv2.resize(image,(RESIZE_SIZE,RESIZE_SIZE))
-    target_h, target_w = target_shape
-    height, width = image.shape
-
-    if is_random:
-        start_x = random.randint(0, width - target_w)
-        start_y = random.randint(0, height - target_h)
-    else:
-        start_x = ( width - target_w ) // 2
-        start_y = ( height - target_h ) // 2
-
-    zeros = image[start_y:start_y+target_h,start_x:start_x+target_w]
-    return zeros
 
 def TTA_9_cropps_color(image, target_shape=(48, 48, 3)):
     image = cv2.resize(image, (RESIZE_SIZE, RESIZE_SIZE))
@@ -186,14 +171,9 @@ def augumentor_1(color, label, target_shape=(32, 32, 3)):
     
     # if random.random() < 0.1:   # protocol 3
     #    color = CutOut(color)      # protocol 3
-#    if int(label) == 0:
-#        if random.random() < 0.2:
-#            color = noise.augment_image(color)
-    
-    #color = random_resize(color)
+
     color = (color - 127.5) / 128
-    #color = color / 255.0
-    # color = image_into_patches(color, target_shape, 0.25)
+
     # color = RandomErasing(color)  # protocol 3&4 wo
     color = TTA_9_cropps_color(color, target_shape)
 
@@ -208,19 +188,14 @@ def augumentor_2(color, target_shape=(32, 32, 3)):
         # iaa.GammaContrast(gamma=(0.9, 1.1)), #protocol 3&4 wo
     ])
     color = augment_img.augment_image(color)
-    #color = random_resize(color)
+
     color = (color - 127.5) / 128
-    #color = color / 255.0
-    ## segmentation
-    # src
-    # color = image_into_patches(color, target_shape, 0.25)
+
     color = TTA_9_cropps_color(color, target_shape)
     return color
 
 def image_into_patches(image, target_patch=32, overlap=0.25):
-    # print("*****image shape*******")
-    # print(image.shape)
-    # print(target_patch)
+
     width, height, _ = image.shape
     overlap_size = int(target_patch[0] * (1 - overlap))
 
