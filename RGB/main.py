@@ -81,27 +81,15 @@ def main(config):
     optimizer = build_optimizer(config, model)
     if config.AMP_OPT_LEVEL != "O0":
         model, optimizer = amp.initialize(model, optimizer, opt_level=config.AMP_OPT_LEVEL)
-    # print("*******************")
-    # print(config.LOCAL_RANK)
-    # print("*******************")
+
     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[config.LOCAL_RANK], broadcast_buffers=False,  find_unused_parameters=True)
     model_without_ddp = model.module
 
     n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
     logger.info(f"number of params: {n_parameters}")
-    # if hasattr(model_without_ddp, 'flops'):
-    #     flops = model_without_ddp.flops()
-    #     logger.info(f"number of GFLOPs: {flops / 1e9}")
 
     lr_scheduler = build_scheduler(config, optimizer, len(data_loader_train))
 
-    # if config.AUG.MIXUP > 0.:
-    #     # smoothing is handled with mixup label transform
-    #     criterion = SoftTargetCrossEntropy()
-    # elif config.MODEL.LABEL_SMOOTHING > 0.:
-    #     criterion = LabelSmoothingCrossEntropy(smoothing=config.MODEL.LABEL_SMOOTHING)
-    # else:
-    #     criterion = torch.nn.CrossEntropyLoss()
     criterion = softmax_cross_entropy_criterion
     
 
@@ -173,9 +161,6 @@ def train_one_epoch(config, model, criterion, data_loader, optimizer, epoch, lr_
     for idx, (samples, targets) in enumerate(data_loader):
         samples = samples.cuda(non_blocking=True)
         targets = targets.cuda(non_blocking=True)
-
-        # if mixup_fn is not None:
-        #     samples, targets = mixup_fn(samples, targets)
 
         outputs = model(samples)
         targets = targets.view(outputs.shape[0])
