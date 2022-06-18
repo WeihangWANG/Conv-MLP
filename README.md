@@ -7,9 +7,9 @@
 
 This repo is a python reimplementation of Conv-MLP.
 
-Conv-MLP is a simple yet effective  architecture for multi-modal face anti-spoofing, which incorporates local patch convolution with global MLP. 
+Conv-MLP is a simple yet effective architecture which incorporates local patch convolution with global MLP and breaks the inductive bias limitation of traditional full CNNs and can be expected to better exploit long-range dependencies.
 
-Conv-MLP breaks the inductive bias limitation of traditional full CNNs and can be expected to better exploit long-range dependencies.
+Here we give the implementation of multi-modal face anti-spoofing on the WMCA dataset. We also provide Conv-MLP RGB-mode(https://github.com/WeihangWANG/Conv-MLP/tree/master/RGB) on the OULU-NPU dataset.
  
 <div align=center>
 <img src="image/conv-mlp-1-1118.png" width="400" height="400"/>
