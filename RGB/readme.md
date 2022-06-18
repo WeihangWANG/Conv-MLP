@@ -9,7 +9,8 @@ This is the branch for the implementation of Conv-MLP in RGB mode. We give the p
 - Python 3.7
 - torch, torchvision
 - opencv-python, numpy, shutil, tqdm, timm, imgaug
-You can also install `apex` to streamline mixed precision and distributed training in Pytorch. Please visit (https://github.com/NVIDIA/apex) for more details. If you donot want to use `apex`, just comment out the relevent codes in `main.py`.
+
+You can also install `apex` to streamline mixed precision and distributed training in Pytorch. Please visit https://github.com/NVIDIA/apex for more details. If you donot want to use `apex`, just comment out the relevent codes in `main.py`.
 
 ### Datasets
 We train and test on the [OULU-NPU](https://sites.google.com/site/oulunpudatabase/) dataset. According to the usage license agreement, we do not have the right to provide the datasets in public. If you need to use them, please refer to the link and apply to the relevant scientific institutions for research usage.
