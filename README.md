@@ -18,11 +18,9 @@ The overall pipeline of Conv-MLP.
 </div>
 
 
-## Performace
+## Performance
 
-We conduct experiments to evaluate the performance of
-Conv-MLP in terms of accuracy and computational efficiency
-on multi-modal benchmarks (WMCA and CeFA) in comparison with existing state-of-the-art methods, including full CNN models and transformer-based ViT models.
+We conduct experiments to evaluate the performance of Conv-MLP in terms of accuracy and computational efficiency on multi-modal and RGB benchmarks in comparison with existing state-of-the-art methods, including full CNN models and transformer-based ViT models.
 
 ### Results on WMCA
 
