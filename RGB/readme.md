@@ -24,4 +24,7 @@ python -m torch.distributed.launch --nproc_per_node 4 --master_port 12345  main.
 ```
 Note: For each protocol of OULU-NPU, you need to modify the data path in `/data/prepare_data.py` and adjust the revelent hyper-parameters in `/data/augmentaion_oulu.py`.
 
-
+### Pretrained Models
+- To be continued
+    *BaiduCloud:* 
+    *GoogleDrive:* 
