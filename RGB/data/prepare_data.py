@@ -2,8 +2,9 @@ import os
 import random
 from utils import *
 
-DATA_ROOT = '../oulu-npu'
-VAL_ROOT = '../oulu-npu/Test_files/Test_files/'
+# The path of OULU dataset
+DATA_ROOT = '../../oulu-npu'
+VAL_ROOT = '../../oulu-npu/Test_files/Test_files/'
 
 TRN_IMGS_DIR = DATA_ROOT + '/Training/'
 TST_IMGS_DIR = DATA_ROOT + '/Testing/'
